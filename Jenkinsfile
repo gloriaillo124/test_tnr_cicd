@@ -4,7 +4,7 @@ pipeline{
     }
     agent{
         docker{
-            image 'maven-chrome-windows:latest'
+            image 'markhobson/maven-chrome'
         }
     }
     stages{
