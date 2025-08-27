@@ -4,7 +4,7 @@ pipeline{
     }
     agent{
         docker{
-            image 'maven:3.9.11-eclipse-temurin-24'
+            image 'maven-chrome-windows:latest'
         }
     }
     stages{
