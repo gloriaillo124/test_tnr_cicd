@@ -31,7 +31,7 @@ public class LoginTest {
         caps.setBrowserName("chrome"); 
 
         driver = new RemoteWebDriver(hubUrl, caps);
-        driver.get("https://www.saucedemo.com/");
+        driver.get("http://192.168.1.31/:4444/wd/hub");
     }
 
     @AfterEach
