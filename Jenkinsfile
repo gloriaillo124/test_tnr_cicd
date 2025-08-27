@@ -4,7 +4,7 @@ pipeline{
     }
     agent{
         docker{
-            image 'markhobson/maven-chrome'
+            image 'maven:3.9.11-eclipse-temurin-24'
         }
     }
     stages{

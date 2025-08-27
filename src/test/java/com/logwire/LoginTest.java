@@ -1,5 +1,8 @@
 package com.logwire;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,7 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class LoginTest {
 
@@ -19,8 +23,14 @@ public class LoginTest {
     private By errorMessageBy = By.cssSelector("[data-test='error']");
 
     @BeforeEach
-    public void setup() {
-        driver = new FirefoxDriver();
+    public void setup() throws MalformedURLException {
+
+        URL hubUrl = new URL("http://192.168.1.31/:4444/wd/hub");
+
+        DesiredCapabilities caps = new DesiredCapabilities();
+        caps.setBrowserName("chrome"); 
+
+        driver = new RemoteWebDriver(hubUrl, caps);
         driver.get("https://www.saucedemo.com/");
     }
 
@@ -31,15 +41,12 @@ public class LoginTest {
             driver = null;
         }
     }
+
     @Test
     @Tag("tc-001")
-    public void test3() {
-        WebElement usernameElement = driver.findElement(usernameBy);
-        usernameElement.sendKeys("standard_user");
-
-        WebElement passwordElement = driver.findElement(passwordBy);
-        passwordElement.sendKeys("secret_sauce");
-
+    public void testLoginCorrect() {
+        driver.findElement(usernameBy).sendKeys("standard_user");
+        driver.findElement(passwordBy).sendKeys("secret_sauce");
         driver.findElement(loginButtonBy).click();
 
         String currentURL = driver.getCurrentUrl();
@@ -48,13 +55,9 @@ public class LoginTest {
 
     @Test
     @Tag("tc-002")
-    public void test1() {
-        WebElement usernameElement = driver.findElement(usernameBy);
-        usernameElement.sendKeys("incorrect_username");
-
-        WebElement passwordElement = driver.findElement(passwordBy);
-        passwordElement.sendKeys("secret_sauce");
-
+    public void testUsernameIncorrect() {
+        driver.findElement(usernameBy).sendKeys("incorrect_username");
+        driver.findElement(passwordBy).sendKeys("secret_sauce");
         driver.findElement(loginButtonBy).click();
 
         WebElement erreur = driver.findElement(errorMessageBy);
@@ -64,19 +67,13 @@ public class LoginTest {
 
     @Test
     @Tag("tc-003")
-    public void test2() {
-        WebElement usernameElement = driver.findElement(usernameBy);
-        usernameElement.sendKeys("standard_user");
-
-        WebElement passwordElement = driver.findElement(passwordBy);
-        passwordElement.sendKeys("incorrect_password");
-
+    public void testPasswordIncorrect() {
+        driver.findElement(usernameBy).sendKeys("standard_user");
+        driver.findElement(passwordBy).sendKeys("incorrect_password");
         driver.findElement(loginButtonBy).click();
 
         WebElement erreur = driver.findElement(errorMessageBy);
         assertEquals("Epic sadface: Username and password do not match any user in this service",
                      erreur.getText());
     }
-
-    
 }
