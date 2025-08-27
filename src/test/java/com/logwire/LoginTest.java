@@ -25,13 +25,13 @@ public class LoginTest {
     @BeforeEach
     public void setup() throws MalformedURLException {
 
-        URL hubUrl = new URL("http://192.168.1.31/:4444/wd/hub");
+        URL hubUrl = new URL("http://192.168.1.31:4444/wd/hub");
 
         DesiredCapabilities caps = new DesiredCapabilities();
         caps.setBrowserName("chrome"); 
 
         driver = new RemoteWebDriver(hubUrl, caps);
-        driver.get("http://192.168.1.31/:4444/wd/hub");
+        driver.get("https://www.saucedemo.com/");
     }
 
     @AfterEach
